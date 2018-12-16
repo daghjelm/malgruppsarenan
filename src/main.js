@@ -1,10 +1,10 @@
 import Vue from 'vue'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
 import App from './App.vue'
-import { MdButton, MdRadio } from 'vue-material/dist/components'
-import 'vue-material/dist/vue-material.min.css'
 
-Vue.use(MdButton)
-Vue.use(MdRadio)
+Vue.use(Buefy)
+
 Vue.config.productionTip = false
 
 new Vue({

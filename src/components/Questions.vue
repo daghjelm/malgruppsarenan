@@ -1,37 +1,28 @@
 <template>
   <div class="questions">
-      {{msg}}
-    <div>
-      <select v-model="input[0]">
-        <option v-for="value in values" :key="value">
-          {{ value }}
-        </option>
-      </select>
 
-
-      <p>Jag ger gärna pengar till välgörande ändamål eller fredsarbete</p> 
-      <Radio :func="update" :number="1"/>
-
-      <p>Jag är oroad för utsläpp och andra miljöeffekter orsakade av bilar.</p>
-      <Radio :func="update" :number="1"/>
-
-      <p> </p>
-      <Radio :func="update" :number="1"/>
-      
-      <p> </p>
-      <Radio :func="update" :number="1"/>
-
-      <p> </p>
-      <Radio :func="update" :number="1"/>
-
-      <p> </p>
-      <Radio :func="update" :number="1"/>
-
-      <input type="text">
-
+    <div id="intro">
+      Välkommen till målgruppsarenans formulär
     </div>
 
-    <md-button class="md-raised md-primary" v-on:click="printer('hello')">Visa Resultat</md-button>
+    <div id="statements" v-if="answering">
+      <div class="choice" v-for="(statement, index) in statements" :key="index">
+        <p>{{ statement }}</p>
+          <b-radio v-for="item in options" :key="item"
+          v-model="input[index]" :native-value="item" v-on:click="update(value, item)">
+            {{item}}
+          </b-radio>
+      </div>
+    </div>
+
+    <div id="result" v-if="!answering">
+      <p>Din konsumenttyp är {{type}}</p>
+    </div>
+
+    <div class="foot">
+      <button class="button is-success" v-if="answering" v-on:click="answer()"> Beräkna min konsumenttyp </button>
+      <button class="button is-success" v-if="!answering" v-on:click="answering = true"> Gör om testet </button>
+    </div>
 
   </div>
 
@@ -39,46 +30,65 @@
 
 <script>
 
-import Radio from './Radio.vue'
+import calculate from '../calculation'
+
 
 export default {
   name: 'Questions',
-  data: function () {
-    return {
-      input: []
-    }
-  },
   props: {
     msg: String,
+    statements: Array
   },
-  methods: {
-    printer: function (message) {
-      console.log(message)
-    },
-    update: function (value, number) {
-      input[number] = value;
+  data () {
+    return {
+      input: [],
+      radio: true,
+      options: [1, 2, 3, 4, 5],
+      answering: true,
+      type: "BRA"
     }
   },
-  components: {
-    Radio
+  methods: {
+    printer (message) {
+      console.log(message)
+    },
+    update (value, number) {
+      console.log(value, number)
+      this.input.splice(number, 1, value)
+    },
+    answer () {
+      if(this.input[3] === 5) {
+        this.type = "DÅLIG"
+      }
+
+      console.log(calculate(this.input))
+      this.answering = false;
+    }
+
+  },
+  created () {
+    this.statements.forEach(() => {
+      this.input.push(0)
+    });
   }
+
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.choice {
+  margin-bottom: 2em;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+#intro {
+  margin-bottom: 2em;
+  font-size: 2em
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.foot {
+  margin-bottom: 2em;
 }
-a {
-  color: #42b983;
-}
+
 </style>
