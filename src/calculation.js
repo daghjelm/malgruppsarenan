@@ -1,6 +1,6 @@
 const getTypes = (obj, arr) => {
   console.log(obj, arr)
-  arr = arr.sort();
+  arr = arr.sort().reverse();
   console.log(getKeyByValue(obj, arr[0]))
   let labels = arr.map(x => getKeyByValue(obj, x))
   console.log(arr, getPercent(arr))
@@ -9,7 +9,7 @@ const getTypes = (obj, arr) => {
 
 const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value)
 
-const getPercent = arr => arr.map(x => Math.round(100 * x / arr.reduce((x, y) => x + y)));
+const getPercent = arr => arr.map(x => Math.round(10 * (100 * x / arr.reduce((x, y) => x + y))) / 10);
 
 const calculate = (arr) => {
   let b64 = 0.855413313620318
