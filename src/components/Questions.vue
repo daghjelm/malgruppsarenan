@@ -1,8 +1,18 @@
 <template>
   <div class="questions">
 
-    <div id="intro">
-      Välkommen till målgruppsarenans formulär
+    <div v-if="answering">
+      <div id="intro">
+        Välkommen till målgruppsarenans formulär
+      </div>
+
+      <div id="subintro">
+        Fyll i formuläret nedan för att få reda på vilket av mågruppsarenans segment du tillhör! 
+      </div>
+
+      <div id="explain">
+        1 = Instämmer inte alls, 2 = Instämmer knappast, 3 = Varken eller, 4 = Instämmer något, 5 = Instämmer helt och hållet
+      </div>
     </div>
 
     <div id="statements" v-if="answering">
@@ -10,17 +20,18 @@
         <p>{{ statement }}</p>
           <b-radio v-for="item in options" :key="item"
           v-model="input[index]" :native-value="item" v-on:click="update(value, item)">
-            {{item}}
+            {{ item }}
           </b-radio>
       </div>
     </div>
 
     <div id="result" v-if="!answering">
-      <p>Din konsumenttyp är {{type}}</p>
+      <p>Ditt segment är <span id="type">{{ type }}</span> </p>
+      <canvas id="myChart" width="400" height="400"></canvas>
     </div>
 
     <div class="foot">
-      <button class="button is-success" v-if="answering" v-on:click="answer()"> Beräkna min konsumenttyp </button>
+      <button class="button is-success" v-if="answering" v-on:click="answer()"> Beräkna segment</button>
       <button class="button is-success" v-if="!answering" v-on:click="answering = true"> Gör om testet </button>
     </div>
 
@@ -31,7 +42,7 @@
 <script>
 
 import calculate from '../calculation'
-
+import MyChart from './MyChart.vue'
 
 export default {
   name: 'Questions',
@@ -45,23 +56,16 @@ export default {
       radio: true,
       options: [1, 2, 3, 4, 5],
       answering: true,
-      type: "BRA"
+      type: ''
     }
   },
   methods: {
-    printer (message) {
-      console.log(message)
-    },
     update (value, number) {
       console.log(value, number)
       this.input.splice(number, 1, value)
     },
     answer () {
-      if(this.input[3] === 5) {
-        this.type = "DÅLIG"
-      }
-
-      console.log(calculate(this.input))
+      this.type = calculate(this.input);
       this.answering = false;
     }
 
@@ -81,14 +85,37 @@ export default {
 .choice {
   margin-bottom: 2em;
 }
+p {
+  font-weight: 500
+}
 
 #intro {
+  margin-bottom: 1em;
+  font-size: 2em;
+  color: #2D882D;
+}
+
+#subintro {
+  font-weight: 600;
+}
+
+#explain {
   margin-bottom: 2em;
-  font-size: 2em
+  color: #116611;
 }
 
 .foot {
   margin-bottom: 2em;
+}
+
+#result {
+  font-size: 1.5em;
+  margin-top: 10em;
+  margin-bottom: 2em;
+}
+
+#type {
+  font-weight: bold;
 }
 
 </style>
