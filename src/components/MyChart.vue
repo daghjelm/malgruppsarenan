@@ -1,17 +1,29 @@
-import { Bar } from 'vue-chartjs'
+<script>
+  import { Pie } from 'vue-chartjs'
 
-export default {
-  extends: Bar,
-  mounted () {
-    this.renderChart({
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      datasets: [
-        {
-          label: 'GitHub Commits',
-          backgroundColor: '#f87979',
-          data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-        }
-      ]
-    })
+  export default {
+    extends: Pie,
+    props: {
+      labels: Array,
+      data: Array
+    },
+    mounted () {
+      let vm = this
+      this.renderChart({
+        labels: vm.labels.map(x => x + ' %'),
+        datasets: [
+          {
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+            ],
+            data: vm.data
+          }
+        ]
+      },
+      {responsive: true, maintainAspectRatio: false})
+    }
   }
-}
+</script>

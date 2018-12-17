@@ -26,8 +26,8 @@
     </div>
 
     <div id="result" v-if="!answering">
-      <p>Ditt segment är <span id="type">{{ type }}</span> </p>
-      <canvas id="myChart" width="400" height="400"></canvas>
+      <p>Ditt segment är <span id="type">{{ labels[0] }}</span> </p>
+      <my-chart :labels="labels" :data="formData"/>
     </div>
 
     <div class="foot">
@@ -56,7 +56,9 @@ export default {
       radio: true,
       options: [1, 2, 3, 4, 5],
       answering: true,
-      type: ''
+      type: '',
+      labels: [],
+      formData: []
     }
   },
   methods: {
@@ -65,7 +67,9 @@ export default {
       this.input.splice(number, 1, value)
     },
     answer () {
-      this.type = calculate(this.input);
+      let calculations = calculate(this.input)
+      this.formData = calculations[1]
+      this.labels = calculations[0]
       this.answering = false;
     }
 
@@ -74,8 +78,10 @@ export default {
     this.statements.forEach(() => {
       this.input.push(0)
     });
+  },
+  components: {
+    MyChart
   }
-
 }
 
 </script>

@@ -1,13 +1,15 @@
 const getTypes = (obj, arr) => {
+  console.log(obj, arr)
   arr = arr.sort();
-  arr.forEach((el, i) => {
-    arr[i] = obj[el]
-  })
-
-  return [arr, getPercent(arr)];
+  console.log(getKeyByValue(obj, arr[0]))
+  let labels = arr.map(x => getKeyByValue(obj, x))
+  console.log(arr, getPercent(arr))
+  return [labels, getPercent(arr)];
 }
 
-const getPercent = arr => arr.map(x => 100 * x / arr.reduce((x, y) => x + y));
+const getKeyByValue = (object, value) => Object.keys(object).find(key => object[key] === value)
+
+const getPercent = arr => arr.map(x => Math.round(100 * x / arr.reduce((x, y) => x + y)));
 
 const calculate = (arr) => {
   let b64 = 0.855413313620318
@@ -75,10 +77,10 @@ const calculate = (arr) => {
   let bev = e76 + arr[7]*e64 + arr[8]*e65 + arr[9]*e66 + arr[10]*e67 + arr[11]*e68 + arr[13]*e69 + arr[14]*e70 + arr[15]*e71 + arr[16]*e72 + arr[17]*e73 + arr[18]*e74 + arr[19]*e75
 
   return getTypes({
-      utf: 'Utforskare',
-      sam: 'Samhällsfokuserade',
-      fram: 'Framgångssträvare',
-      bev: 'Bevarare'
+      'Utforskare': utf,
+      'Samhällsfokuserade': sam,
+      'Framgångssträvare': fram,
+      'Bevarare' : bev
   }, [utf, sam, fram, bev])
 }
 
